@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from .models import Blog
 
 
 class RegisterSerializer(serializers.Serializer):
@@ -45,3 +46,9 @@ class LoginSerializer(serializers.Serializer):
             return {'message':'Logged in successfully.', 'data':{'token':{'refresh':str(refresh), 'access':str(refresh.access_token)}}}
         else:
             return {'message':'Invalid credentials.', 'data':{}}
+        
+
+class BlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Blog
+        exclude = ['user', 'createdAt', 'updatedAt']
