@@ -4,5 +4,6 @@ from .views import *
 urlpatterns = [
     path('register', RegisterView.as_view()),
     path('login', LoginView.as_view()),
-    path('blog', BlogView.as_view()),
+    path('blog', CreateBlog.as_view()),
+    path('blogs/<str:user>', ViewUserBlogs.as_view()),
 ]
