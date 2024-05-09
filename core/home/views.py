@@ -94,17 +94,17 @@ class CreateBlog(APIView):
         
 
 class ViewUserBlogs(APIView):
-    def get(self, request, user):
+    def get(self, request, pk):
         try:
             user = request
-            blogs = Blog.objects.filter(user = user)
+            blogs = Blog.objects.filter(user = pk)
             search_query = request.GET.get('search')
 
             if search_query:
-                blogs = blogs.filter(Q(title__icontains = search_query) | Q(content__icontains = search_query))
+                blogs = blogs.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
 
             serializer = BlogSerializer(blogs, many = True)
-            #user = User.objects.get(id = pk)
+            user = User.objects.get(id = pk)
 
             return Response({
                 'success' : True,
@@ -125,3 +125,4 @@ class ViewUserBlogs(APIView):
                 'message' : 'Something went wrong.',
                 'error' : str(ex)
             }, status = status.HTTP_400_BAD_REQUEST)
+        
