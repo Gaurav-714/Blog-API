@@ -95,7 +95,7 @@ class ViewUserBlogs(APIView):
             }, status = status.HTTP_400_BAD_REQUEST)
     
 
-class CreateUpdateBlog(APIView):
+class CreateBlog(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -127,6 +127,11 @@ class CreateUpdateBlog(APIView):
                 'error' : str(ex)
             }, status = status.HTTP_400_BAD_REQUEST)
             
+        
+class UpdateBlog(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request):
         try:
             data = request.data
@@ -167,6 +172,11 @@ class CreateUpdateBlog(APIView):
                 'error' : str(ex)
             }, status = status.HTTP_400_BAD_REQUEST)
         
+
+class DeleteBlog(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request):
         try:
             data = request.data
