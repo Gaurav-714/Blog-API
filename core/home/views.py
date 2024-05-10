@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.db.models import Q
+from django.core.paginator import Paginator
 from .serializers import *
 
 
@@ -52,7 +53,6 @@ class LoginView(APIView):
                 }, status = status.HTTP_400_BAD_REQUEST)
         
         except Exception as ex:
-            print(ex)
             return Response({
                     'success' : False,
                     'message' : 'Something went wrong.',
@@ -165,7 +165,6 @@ class UpdateBlog(APIView):
             }, status = status.HTTP_400_BAD_REQUEST)
         
         except Exception as ex:
-            print(ex)
             return Response({
                 'success' : False,
                 'message' : 'Something went wrong.',
@@ -202,7 +201,6 @@ class DeleteBlog(APIView):
                 }, status = status.HTTP_404_NOT_FOUND)
             
         except Exception as ex:
-            print(ex)
             return Response({
                 'success' : False,
                 'message' : 'Something went wrong.',
@@ -210,3 +208,27 @@ class DeleteBlog(APIView):
             }, status = status.HTTP_400_BAD_REQUEST)
                 
             
+class PublicBlogs(APIView):
+    def get(self, request):
+        try:
+            blogs = Blog.objects.all().order_by('?')
+            search_query = request.GET.get('search')
+            if search_query:
+                blogs = Blog.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+
+            page_number = request.GET.get('page', 1)
+            paginator = Paginator(blogs, 5)
+
+            serializer = BlogSerializer(paginator.page(page_number), many=True)
+            return Response({
+                'success' : True,
+                'message' : 'Blogs fetched successfully.',
+                'data' : serializer.data
+            }, status = status.HTTP_200_OK)
+        
+        except Exception as ex:
+            return Response({
+                'success' : False,
+                'message' : 'Something went wrong.',
+                'error' : str(ex)
+            }, status = status.HTTP_400_BAD_REQUEST)
