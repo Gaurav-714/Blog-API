@@ -214,7 +214,7 @@ class PublicBlogs(APIView):
             blogs = Blog.objects.all().order_by('?')
             search_query = request.GET.get('search')
             if search_query:
-                blogs = Blog.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
+                blogs = Blog.objects.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
 
             page_number = request.GET.get('page', 1)
             paginator = Paginator(blogs, 5)

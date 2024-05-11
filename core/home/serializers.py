@@ -51,4 +51,4 @@ class LoginSerializer(serializers.Serializer):
 class BlogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Blog
-        exclude = ['user', 'createdAt', 'updatedAt']
+        exclude = ['createdAt', 'updatedAt']
